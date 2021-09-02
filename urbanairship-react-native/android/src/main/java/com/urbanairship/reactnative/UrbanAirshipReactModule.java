@@ -688,6 +688,24 @@ public class UrbanAirshipReactModule extends ReactContextBaseJavaModule {
         }
     }
 
+    /**
+     * Marks an inbox message as unread.
+     *
+     * @param messageId The id of the message to be marked as unread.
+     * @param promise The JS promise.
+     */
+    @ReactMethod
+    public void markInboxMessageUnread(String messageId, Promise promise) {
+        Message message = MessageCenter.shared().getInbox().getMessage(messageId);
+
+        if (message == null) {
+            promise.reject("STATUS_MESSAGE_NOT_FOUND", "Message not found.");
+        } else {
+            message.markUnread();
+            promise.resolve(true);
+        }
+    }
+
     @ReactMethod
     public void clearNotifications() {
         NotificationManagerCompat.from(UAirship.getApplicationContext()).cancelAll();
